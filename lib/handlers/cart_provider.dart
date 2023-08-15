@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shopping_cart_provider/cart_total_model.dart';
-import 'package:shopping_cart_provider/database_handler.dart';
+import 'package:shopping_cart_provider/handlers/database_handler.dart';
+import 'package:shopping_cart_provider/models/cart_model.dart';
+import 'package:shopping_cart_provider/models/cart_total_model.dart';
 
 class CartProvider with ChangeNotifier {
   DatabaseHandler? dbHandler = DatabaseHandler();
@@ -11,6 +12,9 @@ class CartProvider with ChangeNotifier {
 
   double _cartTotal = 0.0;
   double get cartTotal => _cartTotal;
+
+  late Future<List<CartModel>> _cart;
+  Future<List<CartModel>> get cart => _cart;
 
   /// Shared Preferences implementation
   Future<void> _setPrefItems() async {
@@ -79,7 +83,7 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _getCartItems() async {
+  Future<void> _getCartTotalCount() async {
     CartTotalModel? cartTotalModel = await dbHandler!.getCartCountTotal();
 
     _itemCount = cartTotalModel?.itemCount ?? 0;
@@ -101,7 +105,7 @@ class CartProvider with ChangeNotifier {
   }
 
   int getCartItemCount() {
-    _getCartItems();
+    _getCartTotalCount();
     return _itemCount;
   }
 
@@ -118,7 +122,12 @@ class CartProvider with ChangeNotifier {
   }
 
   double getCartTotalP() {
-    _getCartItems();
+    _getCartTotalCount();
     return _cartTotal;
+  }
+
+  Future<List<CartModel>> getCartItems() async {
+    _cart = dbHandler!.getCartItems();
+    return _cart;
   }
 }

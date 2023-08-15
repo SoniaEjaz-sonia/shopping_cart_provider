@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shopping_cart_provider/cart_model.dart';
-import 'package:shopping_cart_provider/cart_total_model.dart';
+import 'package:shopping_cart_provider/models/cart_model.dart';
+import 'package:shopping_cart_provider/models/cart_total_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHandler {
@@ -27,9 +27,8 @@ class DatabaseHandler {
   }
 
   _onCreate(Database db, int version) async {
-    await db
-        .execute("CREATE TABLE cart (id INTEGER PRIMARY KEY , productId VARCHAR UNIQUE, productName TEXT, "
-            "initialPrice INTEGER, productPrice INTEGER , quantity INTEGER, unitTag TEXT , image TEXT )");
+    await db.execute("CREATE TABLE cart (id INTEGER PRIMARY KEY , productId VARCHAR UNIQUE, productName TEXT, "
+        "initialPrice INTEGER, productPrice INTEGER , quantity INTEGER, unitTag TEXT , image TEXT )");
 
     await db.execute("CREATE TABLE total (id INTEGER PRIMARY KEY , itemCount INTEGER, cartTotal DOUBLE)");
   }
@@ -41,7 +40,7 @@ class DatabaseHandler {
     return cartModel;
   }
 
-  Future<List<CartModel>?> getCartItems() async {
+  Future<List<CartModel>> getCartItems() async {
     var dbClient = await db;
 
     final List<Map<dynamic, dynamic>> queryResult = await dbClient!.query("cart");

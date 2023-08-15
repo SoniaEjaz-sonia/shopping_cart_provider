@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_cart_provider/cart_model.dart';
-import 'package:shopping_cart_provider/cart_provider.dart';
-import 'package:shopping_cart_provider/cart_total_model.dart';
-import 'package:shopping_cart_provider/database_handler.dart';
+import 'package:shopping_cart_provider/handlers/database_handler.dart';
+import 'package:shopping_cart_provider/models/cart_model.dart';
+import 'package:shopping_cart_provider/handlers/cart_provider.dart';
+import 'package:shopping_cart_provider/screens/cart_screen.dart';
 
 class ProductListScreen extends StatelessWidget {
   ProductListScreen({Key? key}) : super(key: key);
@@ -17,15 +17,13 @@ class ProductListScreen extends StatelessWidget {
       'name': 'Mango',
       'unit': 'KG',
       'price': 10,
-      'image':
-          'https://image.shutterstock.com/image-photo/mango-isolated-on-white-background-600w-610892249.jpg',
+      'image': 'https://image.shutterstock.com/image-photo/mango-isolated-on-white-background-600w-610892249.jpg',
     },
     {
       'name': 'Orange',
       'unit': 'Dozen',
       'price': 20,
-      'image':
-          'https://image.shutterstock.com/image-photo/orange-fruit-slices-leaves-isolated-600w-1386912362.jpg',
+      'image': 'https://image.shutterstock.com/image-photo/orange-fruit-slices-leaves-isolated-600w-1386912362.jpg',
     },
     {
       'name': 'Grapes',
@@ -43,8 +41,7 @@ class ProductListScreen extends StatelessWidget {
       'name': 'Chery',
       'unit': 'KG',
       'price': 50,
-      'image':
-          'https://media.istockphoto.com/photos/cherry-trio-with-stem-and-leaf-picture-id157428769?s=612x612',
+      'image': 'https://media.istockphoto.com/photos/cherry-trio-with-stem-and-leaf-picture-id157428769?s=612x612',
     },
     {
       'name': 'Peach',
@@ -69,18 +66,26 @@ class ProductListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Products List"),
         actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Badge(
-              backgroundColor: Colors.red,
-              label: Consumer<CartProvider>(
-                builder: (context, value, child) {
-                  return Text(value.getCartItemCount().toString());
-                },
+          InkWell(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CartScreen(),
               ),
-              child: const Padding(
-                padding: EdgeInsets.all(3.0),
-                child: Icon(Icons.shopping_bag_outlined),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Badge(
+                backgroundColor: Colors.red,
+                label: Consumer<CartProvider>(
+                  builder: (context, value, child) {
+                    return Text(value.getCartItemCount().toString());
+                  },
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(3.0),
+                  child: Icon(Icons.shopping_bag_outlined),
+                ),
               ),
             ),
           ),
@@ -145,7 +150,6 @@ class ProductListScreen extends StatelessWidget {
                       .then((value) {
                     cartProvider.addToCartTotal(double.parse(productsList[index]["price"].toString()));
                     cartProvider.incrementCartCount();
-                    print("added");
                   }).onError((error, stackTrace) {
                     debugPrint(error.toString());
                   });

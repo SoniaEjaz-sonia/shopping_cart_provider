@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'cart_provider.dart';
-import 'product_list_screen.dart';
+import 'handlers/cart_provider.dart';
+import 'screens/product_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,10 +25,8 @@ class MyApp extends StatelessWidget {
             appBarTheme: const AppBarTheme(
               centerTitle: true,
               backgroundColor: Colors.deepPurple,
-              titleTextStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-              ),
+              titleTextStyle: TextStyle(color: Colors.white, fontSize: 22),
+              iconTheme: IconThemeData(color: Colors.white),
               actionsIconTheme: IconThemeData(color: Colors.white),
             ),
           ),
