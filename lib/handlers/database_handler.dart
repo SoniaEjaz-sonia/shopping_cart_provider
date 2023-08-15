@@ -91,4 +91,15 @@ class DatabaseHandler {
       whereArgs: [id],
     );
   }
+
+  Future<int> update(CartModel cartModel) async {
+    var dbClient = await db;
+
+    return await dbClient!.update(
+      'cart',
+      cartModel.toMap(),
+      where: 'id = ?',
+      whereArgs: [cartModel.id],
+    );
+  }
 }
