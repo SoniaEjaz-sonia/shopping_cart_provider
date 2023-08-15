@@ -70,7 +70,7 @@ class ProductListScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const CartScreen(),
+                builder: (context) => CartScreen(),
               ),
             ),
             child: Padding(
@@ -79,7 +79,7 @@ class ProductListScreen extends StatelessWidget {
                 backgroundColor: Colors.red,
                 label: Consumer<CartProvider>(
                   builder: (context, value, child) {
-                    return Text(value.getCartItemCount().toString());
+                    return Text(value.getItemCount().toString());
                   },
                 ),
                 child: const Padding(
@@ -137,8 +137,8 @@ class ProductListScreen extends StatelessWidget {
                   dbHandler!
                       .insert(
                     CartModel(
-                      id: index + 1,
-                      productId: (index + 1).toString(),
+                      id: index,
+                      productId: (index).toString(),
                       productName: productsList[index]["name"],
                       initialPrice: productsList[index]["price"],
                       productPrice: productsList[index]["price"],
@@ -148,10 +148,11 @@ class ProductListScreen extends StatelessWidget {
                     ),
                   )
                       .then((value) {
-                    cartProvider.addToCartTotal(double.parse(productsList[index]["price"].toString()));
-                    cartProvider.incrementCartCount();
+                    cartProvider.addCartTotal(double.parse(productsList[index]["price"].toString()));
+                    cartProvider.incrementItemCount();
                   }).onError((error, stackTrace) {
                     debugPrint(error.toString());
+                    debugPrintStack(stackTrace: stackTrace);
                   });
                 },
                 child: const Text(

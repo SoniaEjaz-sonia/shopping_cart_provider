@@ -1,10 +1,15 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_cart_provider/handlers/cart_provider.dart';
+import 'package:shopping_cart_provider/handlers/database_handler.dart';
 import 'package:shopping_cart_provider/models/cart_model.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  CartScreen({Key? key}) : super(key: key);
+
+  DatabaseHandler? dbHandler = DatabaseHandler();
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +63,13 @@ class CartScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    trailing: ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                      onPressed: () {},
-                      child: const Text(
-                        "Add to cart",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                    trailing: IconButton(
+                      onPressed: () {
+                        dbHandler!.delete(snapshot.data![index].id!);
+                        cartProvider.decrementItemCount();
+                        cartProvider.removeCartTotal(snapshot.data![index].productPrice!.toDouble());
+                      },
+                      icon: const Icon(Icons.delete),
                     ),
                   ),
                 );
@@ -81,7 +84,7 @@ class CartScreen extends StatelessWidget {
         height: 60,
         surfaceTintColor: Colors.white,
         child: Text(
-          "Total    :    ${cartProvider.getCartTotalP().toStringAsFixed(2)}",
+          "Total    :    ${cartProvider.getCartTotal().toStringAsFixed(2)}",
           textAlign: TextAlign.end,
           style: const TextStyle(
             fontSize: 20,

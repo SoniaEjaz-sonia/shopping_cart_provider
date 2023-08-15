@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopping_cart_provider/handlers/database_handler.dart';
 import 'package:shopping_cart_provider/models/cart_model.dart';
-import 'package:shopping_cart_provider/models/cart_total_model.dart';
 
 class CartProvider with ChangeNotifier {
   DatabaseHandler? dbHandler = DatabaseHandler();
@@ -70,61 +69,74 @@ class CartProvider with ChangeNotifier {
   }
 
   /// SQFLite implementation
-
-  Future<void> _setCartItems() async {
-    dbHandler!.updateCartTotal(
-      CartTotalModel(
-        id: 1,
-        itemCount: _itemCount,
-        cartTotal: _cartTotal,
-      ),
-    );
-
-    notifyListeners();
-  }
-
-  Future<void> _getCartTotalCount() async {
-    CartTotalModel? cartTotalModel = await dbHandler!.getCartCountTotal();
-
-    _itemCount = cartTotalModel?.itemCount ?? 0;
-    _cartTotal = cartTotalModel?.cartTotal ?? 0.0;
-
-    notifyListeners();
-  }
-
-  void incrementCartCount() {
-    _itemCount++;
-    _setCartItems();
-    notifyListeners();
-  }
-
-  void decrementCartItemCount() {
-    _itemCount--;
-    _setCartItems();
-    notifyListeners();
-  }
-
-  int getCartItemCount() {
-    _getCartTotalCount();
-    return _itemCount;
-  }
-
-  void addToCartTotal(double cartTotal) {
-    _cartTotal = _cartTotal + cartTotal;
-    _setCartItems();
-    notifyListeners();
-  }
-
-  void removeFromCartTotal(double cartTotal) {
-    _cartTotal = _cartTotal - cartTotal;
-    _setCartItems();
-    notifyListeners();
-  }
-
-  double getCartTotalP() {
-    _getCartTotalCount();
-    return _cartTotal;
-  }
+  //
+  // Future<void> _setCartItems() async {
+  //   CartTotalModel? cartTotalModel = await dbHandler!.getCartCountTotal();
+  //
+  //   if (cartTotalModel != null) {
+  //     dbHandler!.updateCartTotal(
+  //       CartTotalModel(
+  //         id: 1,
+  //         itemCount: _itemCount,
+  //         cartTotal: _cartTotal,
+  //       ),
+  //     );
+  //   } else {
+  //     await dbHandler!.insertCartTotal(
+  //       CartTotalModel(
+  //         id: null,
+  //         itemCount: _itemCount,
+  //         cartTotal: _cartTotal,
+  //       ),
+  //     );
+  //   }
+  //
+  //   notifyListeners();
+  // }
+  //
+  // Future<void> _getCartTotalCount() async {
+  //   CartTotalModel? cartTotalModel = await dbHandler!.getCartCountTotal();
+  //
+  //   _itemCount = cartTotalModel?.itemCount ?? 0;
+  //   _cartTotal = cartTotalModel?.cartTotal ?? 0.0;
+  //
+  //   notifyListeners();
+  // }
+  //
+  // void incrementCartCount() {
+  //   _itemCount++;
+  //   _setCartItems();
+  //   notifyListeners();
+  // }
+  //
+  // void decrementCartItemCount() {
+  //   _itemCount--;
+  //   _setCartItems();
+  //   notifyListeners();
+  // }
+  //
+  // int getCartItemCount() {
+  //   _getCartTotalCount();
+  //   return _itemCount;
+  // }
+  //
+  // void addToCartTotal(double cartTotal) async {
+  //   _cartTotal = _cartTotal + cartTotal;
+  //   _setCartItems();
+  //
+  //   notifyListeners();
+  // }
+  //
+  // void removeFromCartTotal(double cartTotal) {
+  //   _cartTotal = _cartTotal - cartTotal;
+  //   _setCartItems();
+  //   notifyListeners();
+  // }
+  //
+  // double getCartTotalP() {
+  //   _getCartTotalCount();
+  //   return _cartTotal;
+  // }
 
   Future<List<CartModel>> getCartItems() async {
     _cart = dbHandler!.getCartItems();
